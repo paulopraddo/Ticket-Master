@@ -27,6 +27,23 @@ public class SubcategorySevice {
         this.subcategoryRepository.save(model);
     }
 
+    public GetSubcategoryDTO getSubcategory(String name) {
+        Subcategory subcategory = this.subcategoryRepository.findByName(name);
+
+        if(subcategory == null) {
+            throw new RuntimeException("Error while trying to find subcategory");
+        }
+
+        return GetSubcategoryDTO
+            .builder()
+            .name(subcategory.getName())
+            .description(subcategory.getDescription())
+            .eventCategory(subcategory.getEventCategory())
+            .createdAt(subcategory.getCreatedAt())
+            .updateAt(subcategory.getUpdatedAt())
+            .build();
+    }
+
     public List<GetSubcategoryDTO> getListOfSubcategories() {
         List<Subcategory> subcategories = this.subcategoryRepository.findAll();
 
