@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ticketmaster.api.app.category.dtos.GetSubcategoryDTO;
+import com.ticketmaster.api.app.category.dtos.GetSubcategoryResponseDTO;
+import com.ticketmaster.api.app.category.dtos.UpdateSubcategoryRequestDTO;
 import com.ticketmaster.api.app.category.dtos.UploadSubcategoryRequestDTO;
 import com.ticketmaster.api.app.category.service.SubcategorySevice;
 
@@ -36,16 +38,25 @@ public class SubcategoryController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<GetSubcategoryDTO> getSubcategory(@PathVariable String name) {
+    public ResponseEntity<GetSubcategoryResponseDTO> getSubcategory(@PathVariable String name) {
         return ResponseEntity.ok().body(this.subcategorySevice.getSubcategory(name));
     }
 
     @GetMapping
-    public ResponseEntity<List<GetSubcategoryDTO>> getSubcategories() {
+    public ResponseEntity<List<GetSubcategoryResponseDTO>> getSubcategories() {
 
-        List<GetSubcategoryDTO> subcategories = this.subcategorySevice.getListOfSubcategories();
+        List<GetSubcategoryResponseDTO> subcategories = this.subcategorySevice.getListOfSubcategories();
 
         return ResponseEntity.ok().body(subcategories);
+    }
+
+
+    @PutMapping
+    public ResponseEntity<UpdateSubcategoryRequestDTO> updateSubcategory(@RequestBody UpdateSubcategoryRequestDTO dto) {
+        
+        this.subcategorySevice.updateSubcategory(dto);
+
+        return ResponseEntity.ok().body(dto);
     }
 
     @DeleteMapping("/{name}")

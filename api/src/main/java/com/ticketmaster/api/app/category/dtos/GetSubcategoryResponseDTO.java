@@ -7,6 +7,6 @@ import com.ticketmaster.api.domain.category.model.EventCategory;
 import lombok.Builder;
 
 @Builder
-public record GetSubcategoryDTO(String name, String description, EventCategory eventCategory, LocalDateTime createdAt, LocalDateTime updateAt) {
+public record GetSubcategoryResponseDTO(String name, String description, EventCategory eventCategory, LocalDateTime createdAt, LocalDateTime updateAt) {
 
 }

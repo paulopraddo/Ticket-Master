@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ticketmaster.api.app.category.dtos.GetSubcategoryDTO;
+import com.ticketmaster.api.app.category.dtos.GetSubcategoryResponseDTO;
+import com.ticketmaster.api.app.category.dtos.UpdateSubcategoryRequestDTO;
 import com.ticketmaster.api.app.category.dtos.UploadSubcategoryRequestDTO;
 import com.ticketmaster.api.domain.category.model.Subcategory;
 import com.ticketmaster.api.domain.category.repository.SubcategoryRepository;
@@ -27,14 +28,14 @@ public class SubcategorySevice {
         this.subcategoryRepository.save(model);
     }
 
-    public GetSubcategoryDTO getSubcategory(String name) {
+    public GetSubcategoryResponseDTO getSubcategory(String name) {
         Subcategory subcategory = this.subcategoryRepository.findByName(name);
 
         if(subcategory == null) {
             throw new RuntimeException("Error while trying to find subcategory");
         }
 
-        return GetSubcategoryDTO
+        return GetSubcategoryResponseDTO
             .builder()
             .name(subcategory.getName())
             .description(subcategory.getDescription())
@@ -44,13 +45,13 @@ public class SubcategorySevice {
             .build();
     }
 
-    public List<GetSubcategoryDTO> getListOfSubcategories() {
+    public List<GetSubcategoryResponseDTO> getListOfSubcategories() {
         List<Subcategory> subcategories = this.subcategoryRepository.findAll();
 
-        List<GetSubcategoryDTO> subcategoryDtos = subcategories
+        List<GetSubcategoryResponseDTO> subcategoryDtos = subcategories
         .stream()
         .map(subcategory -> 
-            GetSubcategoryDTO
+            GetSubcategoryResponseDTO
             .builder()
             .name(subcategory.getName())
             .description(subcategory.getDescription())
@@ -61,6 +62,20 @@ public class SubcategorySevice {
         .collect(Collectors.toList());
         
         return subcategoryDtos;
+    }
+
+    public void updateSubcategory(UpdateSubcategoryRequestDTO dto) {
+        Subcategory subcategory = this.subcategoryRepository.findByName(dto.name());
+
+        if(subcategory == null) {
+            throw new RuntimeException("Error while trying to find subcategory");
+        }
+
+        if(dto.newName() != null) subcategory.setName(dto.newName());
+        if(dto.newDescription() != null) subcategory.setDescription(dto.newDescription());
+        if(dto.newEventCategory() != null) subcategory.setEventCategory(dto.newEventCategory());
+
+        this.subcategoryRepository.save(subcategory);
     }
 
     public void deleteSubcategory(String name) {
