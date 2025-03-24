@@ -62,4 +62,14 @@ public class SubcategorySevice {
         
         return subcategoryDtos;
     }
+
+    public void deleteSubcategory(String name) {
+        Subcategory subcategory = this.subcategoryRepository.findByName(name);
+
+        if(subcategory == null) {
+            throw new RuntimeException("Error while trying to find subcategory");
+        }
+
+        this.subcategoryRepository.delete(subcategory);
+    }
 }
