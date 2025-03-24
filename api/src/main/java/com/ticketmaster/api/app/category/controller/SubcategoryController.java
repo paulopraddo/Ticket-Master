@@ -1,12 +1,16 @@
 package com.ticketmaster.api.app.category.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ticketmaster.api.app.category.dtos.GetSubcategoryDTO;
 import com.ticketmaster.api.app.category.dtos.UploadSubcategoryRequestDTO;
 import com.ticketmaster.api.app.category.service.SubcategorySevice;
 
@@ -14,9 +18,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 @AllArgsConstructor
-public class EventCategoryController {
+public class SubcategoryController {
 
     @Autowired
     private SubcategorySevice subcategorySevice;
@@ -28,4 +32,13 @@ public class EventCategoryController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<GetSubcategoryDTO>> getSubcategories() {
+
+        List<GetSubcategoryDTO> subcategories = this.subcategorySevice.getListOfSubcategories();
+
+        return ResponseEntity.ok().body(subcategories);
+    }
+
 }

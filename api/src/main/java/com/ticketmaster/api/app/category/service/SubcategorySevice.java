@@ -1,8 +1,12 @@
 package com.ticketmaster.api.app.category.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ticketmaster.api.app.category.dtos.GetSubcategoryDTO;
 import com.ticketmaster.api.app.category.dtos.UploadSubcategoryRequestDTO;
 import com.ticketmaster.api.domain.category.model.Subcategory;
 import com.ticketmaster.api.domain.category.repository.SubcategoryRepository;
@@ -21,5 +25,24 @@ public class SubcategorySevice {
         .build();
 
         this.subcategoryRepository.save(model);
+    }
+
+    public List<GetSubcategoryDTO> getListOfSubcategories() {
+        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+
+        List<GetSubcategoryDTO> subcategoryDtos = subcategories
+        .stream()
+        .map(subcategory -> 
+            GetSubcategoryDTO
+            .builder()
+            .name(subcategory.getName())
+            .description(subcategory.getDescription())
+            .eventCategory(subcategory.getEventCategory())
+            .createdAt(subcategory.getCreatedAt())
+            .updateAt(subcategory.getUpdatedAt())
+            .build())
+        .collect(Collectors.toList());
+        
+        return subcategoryDtos;
     }
 }
