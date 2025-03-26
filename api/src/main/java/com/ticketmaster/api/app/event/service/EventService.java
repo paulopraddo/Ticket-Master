@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ticketmaster.api.app.event.dtos.GetEventResponseDTO;
+import com.ticketmaster.api.app.event.dtos.UpdateEventRequestDTO;
 import com.ticketmaster.api.app.event.dtos.UploadEventRequestDTO;
+import com.ticketmaster.api.domain.category.model.Subcategory;
 import com.ticketmaster.api.domain.category.repository.SubcategoryRepository;
 import com.ticketmaster.api.domain.event.model.Event;
 import com.ticketmaster.api.domain.event.repository.EventRepository;
@@ -63,6 +65,28 @@ public class EventService {
             model.getSubcategory().getName(),
             model.getCapacity(), 
             model.getIsRemote());
+    }
+
+    public void updateEvent(UpdateEventRequestDTO dto) {
+        Event model = this.eventRepository.findByName(dto.name());
+
+        System.out.println("Evento: " + model);
+
+        if(model == null) {
+            throw new RuntimeException("Error while trying to find event");
+        }
+
+        Subcategory newSubcategory = this.subcategoryRepository.findByName(dto.newSubcategoryName());
+
+        if(dto.newName() != null) model.setName(dto.newName());
+        if(dto.newDescription() != null) model.setDescription(dto.newDescription());
+        if(dto.newDateTime() != null) model.setDateTime(dto.newDateTime());
+        if(dto.newLocation() != null) model.setLocation(dto.newLocation());
+        if(newSubcategory != null) model.setSubcategory(newSubcategory);
+        if(dto.newCapacity() != null) model.setCapacity(dto.newCapacity());
+        if(dto.isRemote() != null) model.setIsRemote(dto.isRemote());
+        
+        this.eventRepository.save(model);
     }
 }
 
