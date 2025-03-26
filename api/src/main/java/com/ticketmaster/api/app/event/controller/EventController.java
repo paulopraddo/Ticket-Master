@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +57,14 @@ public class EventController {
     public ResponseEntity<String> updateEvent(@RequestBody UpdateEventRequestDTO dto) {
 
         this.eventService.updateEvent(dto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{name}")
+    public ResponseEntity<String> deleteEvent(@PathVariable String name) {
+
+        this.eventService.deleteEvent(name);
 
         return ResponseEntity.ok().build();
     }
