@@ -88,5 +88,15 @@ public class EventService {
         
         this.eventRepository.save(model);
     }
+
+    public void deleteEvent(String name) {
+        Event model = this.eventRepository.findByName(name);
+
+        if(model == null) {
+            throw new RuntimeException("Error while trying to find event");
+        }
+
+        this.eventRepository.delete(model);
+    }
 }
 
