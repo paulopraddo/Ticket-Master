@@ -47,5 +47,22 @@ public class EventService {
             event.getCapacity(), 
             event.getIsRemote())).collect(Collectors.toList());
     }
+
+    public GetEventResponseDTO getEventByName(String name) {
+        Event model = this.eventRepository.findByName(name);
+
+        if(model == null) {
+            throw new RuntimeException("Error while tryng to find event");
+        }
+
+        return new GetEventResponseDTO(
+            model.getName(), 
+            model.getDescription(), 
+            model.getDateTime(), 
+            model.getLocation(), 
+            model.getSubcategory().getName(),
+            model.getCapacity(), 
+            model.getIsRemote());
+    }
 }
 
