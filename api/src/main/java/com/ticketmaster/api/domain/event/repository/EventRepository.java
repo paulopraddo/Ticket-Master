@@ -8,4 +8,5 @@ import com.ticketmaster.api.domain.event.model.Event;
 @Repository
 public interface EventRepository extends JpaRepository<Event, String> {
 
+    Event findByName(String name);
 }
