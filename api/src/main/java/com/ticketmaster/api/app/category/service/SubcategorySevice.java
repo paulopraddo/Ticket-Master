@@ -48,6 +48,10 @@ public class SubcategorySevice {
     public List<GetSubcategoryResponseDTO> getListOfSubcategories() {
         List<Subcategory> subcategories = this.subcategoryRepository.findAll();
 
+        if(subcategories.isEmpty()) {
+            throw new RuntimeException("Error while trying to find subcategories");
+        }
+
         List<GetSubcategoryResponseDTO> subcategoryDtos = subcategories
         .stream()
         .map(subcategory -> 
