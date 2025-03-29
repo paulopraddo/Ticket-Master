@@ -18,7 +18,7 @@ public class SubcategorySevice {
     @Autowired
     SubcategoryRepository subcategoryRepository;
 
-    public void uploadCategory(UploadSubcategoryRequestDTO dto) {
+    public void uploadSubcategory(UploadSubcategoryRequestDTO dto) {
         Subcategory model = Subcategory.builder()
         .name(dto.name())
         .description(dto.description())
