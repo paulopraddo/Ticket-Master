@@ -31,7 +31,7 @@ public class SubcategoryController {
 
     @PostMapping
     public ResponseEntity<String> uploadSubcategory(@RequestBody @Valid UploadSubcategoryRequestDTO dto) {
-
+    
         this.subcategorySevice.uploadSubcategory(dto);
 
         return ResponseEntity.ok().build();
