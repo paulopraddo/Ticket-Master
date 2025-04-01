@@ -233,9 +233,6 @@ public class SubcategoryControllerTest {
         assertEquals("Error while trying to find subcategory", exception.getMessage());
 
         verify(subcategoryService, times(1)).deleteSubcategory(nonExistentSubcategory);
-}
-
-
-
+    }
 
 }
