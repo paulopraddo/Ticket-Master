@@ -2,7 +2,6 @@ package com.ticketmaster.api.app.ticket.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,7 +17,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.ticketmaster.api.app.event.dtos.GetEventResponseDTO;
 import com.ticketmaster.api.app.ticket.dto.GetTicketsFromEventResponseDTO;
 import com.ticketmaster.api.app.ticket.service.TicketService;
 import com.ticketmaster.api.domain.ticket.model.TicketType;

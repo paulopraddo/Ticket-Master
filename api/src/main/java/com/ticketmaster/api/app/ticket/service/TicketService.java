@@ -32,8 +32,17 @@ public class TicketService {
 
         if(event == null) {
             throw new RuntimeException("Error while trying to find event");
-        }
+        }        
 
+        List<Ticket> tickets = this.ticketRepository.findByEventName(dto.eventName());
+
+        boolean ticketExtists = tickets.stream()
+                .anyMatch(ticket -> ticket.getTicketType().equals(dto.ticketType()));
+
+        if(ticketExtists) {
+            throw new RuntimeException("A ticket of type '" + dto.ticketType() + "' already exists for this event.");
+        }
+        
         Ticket ticket = new Ticket(
             dto.ticketType(), 
             dto.price(), 
