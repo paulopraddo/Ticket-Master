@@ -11,4 +11,7 @@ import com.ticketmaster.api.domain.ticket.model.Ticket;
 public interface TicketRepository extends JpaRepository<Ticket, String> {
 
     List<Ticket> findByEventId(String id);
+
+    List<Ticket> findByEventName(String eventName);
+    
 }

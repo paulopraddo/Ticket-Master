@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.ticketmaster.api.app.ticket.dto.GetTicketsFromEventResponseDTO;
+import com.ticketmaster.api.app.ticket.dto.UploadTicketRequestDTO;
 import com.ticketmaster.api.domain.event.model.Event;
 import com.ticketmaster.api.domain.event.repository.EventRepository;
 import com.ticketmaster.api.domain.ticket.model.Ticket;
@@ -93,5 +94,25 @@ public class TicketServiceTest {
         assertEquals("Error while trying to find event", exception.getMessage());
 
         verify(eventRepository, times(1)).findByName(eventName);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTicketAlreadyExists() {
+        Event event = new Event();
+        event.setName("TestEvent");
+
+        UploadTicketRequestDTO dto = new UploadTicketRequestDTO(TicketType.VIP, 100.00, 100, "TestEvent");
+        Ticket existingTicket = new Ticket();
+        existingTicket.setTicketType(TicketType.VIP);
+
+        when(eventRepository.findByName(dto.eventName())).thenReturn(event);
+        when(ticketRepository.findByEventName(dto.eventName())).thenReturn(List.of(existingTicket));
+
+        // When & Then
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            ticketService.uploadTicket(dto);
+        });
+
+        assertEquals("A ticket of type 'VIP' already exists for this event.", exception.getMessage());
     }
 }
