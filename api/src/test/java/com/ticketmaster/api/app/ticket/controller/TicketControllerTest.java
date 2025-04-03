@@ -2,6 +2,7 @@ package com.ticketmaster.api.app.ticket.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.ticketmaster.api.app.ticket.dto.GetTicketsFromEventResponseDTO;
+import com.ticketmaster.api.app.ticket.dto.UpdateTicketRequestDTO;
 import com.ticketmaster.api.app.ticket.service.TicketService;
 import com.ticketmaster.api.domain.ticket.model.TicketType;
 
@@ -55,6 +57,29 @@ public class TicketControllerTest {
         assertEquals(listOfTickets, response.getBody());
 
         verify(ticketService, times(1)).getTicketsFromEvent(eventName);
+    }
+
+    @Test
+    void shouldUpdateTicketSucessfuly() {
+        UpdateTicketRequestDTO dto = new UpdateTicketRequestDTO();
+        dto.setId("1");
+        
+        ResponseEntity<String> responseEntity = ticketController.updateTicket(dto);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(ticketService, times(1)).updateTicket(dto);
+    }
+
+    @Test
+    void shouldThrowException() {
+        UpdateTicketRequestDTO dto = new UpdateTicketRequestDTO();
+
+        doThrow(new RuntimeException()).when(ticketService).updateTicket(dto);
+
+        ResponseEntity<String> responseEntity = ticketController.updateTicket(dto);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
 }

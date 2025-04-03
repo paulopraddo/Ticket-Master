@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ticketmaster.api.app.ticket.dto.GetTicketsFromEventResponseDTO;
+import com.ticketmaster.api.app.ticket.dto.UpdateTicketRequestDTO;
 import com.ticketmaster.api.app.ticket.dto.UploadTicketRequestDTO;
 import com.ticketmaster.api.domain.event.model.Event;
 import com.ticketmaster.api.domain.event.repository.EventRepository;
@@ -25,7 +26,6 @@ public class TicketService {
     @Autowired
     EventRepository eventRepository;
 
-    //Refatorar esse método para que não possa criar tickets pra eventos onde o tickettype ja foi registrado para o evento especifico.
     public void uploadTicket(UploadTicketRequestDTO dto) {
 
         Event event = this.eventRepository.findByName(dto.eventName());
@@ -69,5 +69,24 @@ public class TicketService {
                 ticket.getQuanty(), 
                 ticket.getEvent().getName()))
             .collect(Collectors.toList());
+    }
+
+    public void updateTicket(UpdateTicketRequestDTO dto) {
+
+        Event event = eventRepository.findByName(dto.getNewEventName());
+
+        if(event == null) {
+            throw new RuntimeException("Error while trying to find event");
+        }
+
+        Ticket ticket = ticketRepository.findById(dto.getId())
+            .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        if(dto.getNewTicketType() != null) ticket.setTicketType(dto.getNewTicketType());
+        if(dto.getNewPrice() != null) ticket.setPrice(dto.getNewPrice());
+        if(dto.getNewQuanty() != null) ticket.setQuanty(dto.getNewQuanty());
+        if(event != null) ticket.setEvent(event);
+
+        this.ticketRepository.save(ticket);
     }
 }
