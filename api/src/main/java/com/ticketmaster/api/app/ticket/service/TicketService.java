@@ -89,4 +89,8 @@ public class TicketService {
 
         this.ticketRepository.save(ticket);
     }
+
+    public void deleteTicket(String ticketId) {
+        this.ticketRepository.deleteById(ticketId);
+    }
 }
